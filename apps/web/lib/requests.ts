@@ -60,3 +60,13 @@ export async function createRequest(
   if (!res.ok) throw await toApiError(res);
   return (await res.json()) as MaintenanceRequest;
 }
+
+export async function listRequests(
+  category?: RequestCategory,
+): Promise<MaintenanceRequest[]> {
+  const url = new URL("/requests", API_URL);
+  if (category) url.searchParams.set("category", category);
+  const res = await fetch(url, { cache: "no-store" });
+  if (!res.ok) throw await toApiError(res);
+  return (await res.json()) as MaintenanceRequest[];
+}

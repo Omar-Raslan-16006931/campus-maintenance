@@ -8,6 +8,7 @@ describe('RequestsService', () => {
   let service: RequestsService;
   const model = {
     create: jest.fn(),
+    find: jest.fn(),
   };
 
   beforeEach(async () => {
@@ -52,6 +53,39 @@ describe('RequestsService', () => {
     it('propagates database errors', async () => {
       model.create.mockRejectedValue(new Error('db down'));
       await expect(service.create(dto)).rejects.toThrow('db down');
+    });
+  });
+
+  describe('findAll', () => {
+    function mockFind(result: unknown[]) {
+      const exec = jest.fn().mockResolvedValue(result);
+      const sort = jest.fn().mockReturnValue({ exec });
+      model.find.mockReturnValue({ sort });
+      return { sort, exec };
+    }
+
+    it('returns all requests newest first when no category is given', async () => {
+      const { sort } = mockFind([{ title: 'a' }, { title: 'b' }]);
+
+      const result = await service.findAll();
+
+      expect(model.find).toHaveBeenCalledWith({});
+      expect(sort).toHaveBeenCalledWith({ createdAt: -1 });
+      expect(result).toHaveLength(2);
+    });
+
+    it('filters by category', async () => {
+      mockFind([{ title: 'sparks', category: 'electrical' }]);
+
+      const result = await service.findAll('electrical');
+
+      expect(model.find).toHaveBeenCalledWith({ category: 'electrical' });
+      expect(result[0].category).toBe('electrical');
+    });
+
+    it('returns an empty list when nothing matches', async () => {
+      mockFind([]);
+      await expect(service.findAll('plumbing')).resolves.toEqual([]);
     });
   });
 });

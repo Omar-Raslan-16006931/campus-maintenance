@@ -11,6 +11,7 @@ describe('RequestsController (HTTP)', () => {
   let app: INestApplication<App>;
   const service = {
     create: jest.fn(),
+    findAll: jest.fn(),
   };
 
   const valid = {
@@ -111,6 +112,42 @@ describe('RequestsController (HTTP)', () => {
       await request(app.getHttpServer())
         .post('/requests')
         .send({ ...valid, priority: 'high' })
+        .expect(400);
+    });
+  });
+
+  describe('GET /requests', () => {
+    it('lists all requests (200)', async () => {
+      service.findAll.mockResolvedValue([{ ...valid, status: 'open' }]);
+
+      const res = await request(app.getHttpServer())
+        .get('/requests')
+        .expect(200);
+
+      expect(res.body).toHaveLength(1);
+      expect(service.findAll).toHaveBeenCalledWith(undefined);
+    });
+
+    it('passes a valid category filter to the service', async () => {
+      service.findAll.mockResolvedValue([]);
+
+      await request(app.getHttpServer())
+        .get('/requests?category=electrical')
+        .expect(200);
+
+      expect(service.findAll).toHaveBeenCalledWith('electrical');
+    });
+
+    it('returns 400 for an unsupported category', async () => {
+      await request(app.getHttpServer())
+        .get('/requests?category=spaceship')
+        .expect(400);
+      expect(service.findAll).not.toHaveBeenCalled();
+    });
+
+    it('returns 400 for unknown query parameters', async () => {
+      await request(app.getHttpServer())
+        .get('/requests?status=open')
         .expect(400);
     });
   });
