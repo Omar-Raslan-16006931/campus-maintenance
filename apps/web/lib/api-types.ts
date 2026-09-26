@@ -27,7 +27,7 @@ export interface paths {
       path?: never;
       cookie?: never;
     };
-    get?: never;
+    get: operations["RequestsController_findAll"];
     put?: never;
     post: operations["RequestsController_create"];
     delete?: never;
@@ -86,6 +86,34 @@ export interface operations {
     requestBody?: never;
     responses: {
       200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+    };
+  };
+  RequestsController_findAll: {
+    parameters: {
+      query?: {
+        category?: components["schemas"]["RequestCategory"];
+      };
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["MaintenanceRequestResponseDto"][];
+        };
+      };
+      /** @description Unsupported category */
+      400: {
         headers: {
           [name: string]: unknown;
         };
