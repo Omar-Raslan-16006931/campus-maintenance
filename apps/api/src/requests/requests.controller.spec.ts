@@ -185,7 +185,7 @@ describe('RequestsController (HTTP)', () => {
       expect(service.resolve).not.toHaveBeenCalled();
     });
 
-    it('always resolves, whatever status the body contains', async () => {
+    it('ignores the request body: the backend alone decides the new status', async () => {
       service.resolve.mockResolvedValue({ _id: id, status: 'resolved' });
       const res = await request(app.getHttpServer())
         .patch(`/requests/${id}/resolve`)

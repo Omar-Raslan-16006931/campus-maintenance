@@ -14,10 +14,10 @@ const valid = {
 };
 
 describe('MaintenanceRequestSchema', () => {
-  it('defaults status to open', () => {
+  it('defaults status to open', async () => {
     const doc = new RequestModel(valid);
     expect(doc.status).toBe('open');
-    expect(doc.validateSync()).toBeUndefined();
+    await expect(doc.validate()).resolves.toBeUndefined();
   });
 
   it('enables timestamps', () => {
@@ -26,19 +26,23 @@ describe('MaintenanceRequestSchema', () => {
 
   it.each(['title', 'description', 'location', 'category'])(
     'requires %s',
-    (field) => {
+    async (field) => {
       const doc = new RequestModel({ ...valid, [field]: undefined });
-      expect(doc.validateSync()?.errors[field]).toBeDefined();
+      await expect(doc.validate()).rejects.toHaveProperty(`errors.${field}`);
     },
   );
 
-  it('rejects unsupported categories', () => {
+  it('rejects unsupported categories', async () => {
     const doc = new RequestModel({ ...valid, category: 'spaceship' });
-    expect(doc.validateSync()?.errors.category).toBeDefined();
+    await expect(doc.validate()).rejects.toHaveProperty('errors.category');
   });
 
-  it('rejects unsupported statuses', () => {
+  it('rejects unsupported statuses', async () => {
     const doc = new RequestModel({ ...valid, status: 'deleted' });
-    expect(doc.validateSync()?.errors.status).toBeDefined();
+    await expect(doc.validate()).rejects.toHaveProperty('errors.status');
+  });
+
+  it('does not add a version key', () => {
+    expect(MaintenanceRequestSchema.get('versionKey')).toBe(false);
   });
 });

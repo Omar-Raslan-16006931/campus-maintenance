@@ -19,11 +19,12 @@ export function ResolveButton({ id, title }: { id: string; title: string }) {
       await resolveRequest(id);
       startTransition(() => router.refresh());
     } catch (err) {
-      setError(
-        err instanceof ApiError && err.status === 404
-          ? "This request no longer exists."
-          : "Could not mark as resolved. Try again.",
-      );
+      if (err instanceof ApiError && err.status === 404) {
+        setError("This request no longer exists.");
+        startTransition(() => router.refresh());
+      } else {
+        setError("Could not mark as resolved. Try again.");
+      }
     } finally {
       setPending(false);
     }

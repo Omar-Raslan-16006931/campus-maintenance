@@ -4,202 +4,201 @@
  */
 
 export interface paths {
-  "/": {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
+    "/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["AppController_getHello"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
     };
-    get: operations["AppController_getHello"];
-    put?: never;
-    post?: never;
-    delete?: never;
-    options?: never;
-    head?: never;
-    patch?: never;
-    trace?: never;
-  };
-  "/requests": {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
+    "/requests": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["RequestsController_findAll"];
+        put?: never;
+        post: operations["RequestsController_create"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
     };
-    get: operations["RequestsController_findAll"];
-    put?: never;
-    post: operations["RequestsController_create"];
-    delete?: never;
-    options?: never;
-    head?: never;
-    patch?: never;
-    trace?: never;
-  };
-  "/requests/{id}/resolve": {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
+    "/requests/{id}/resolve": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch: operations["RequestsController_resolve"];
+        trace?: never;
     };
-    get?: never;
-    put?: never;
-    post?: never;
-    delete?: never;
-    options?: never;
-    head?: never;
-    patch: operations["RequestsController_resolve"];
-    trace?: never;
-  };
 }
 export type webhooks = Record<string, never>;
 export interface components {
-  schemas: {
-    /** @enum {string} */
-    RequestCategory:
-      "equipment" | "electrical" | "plumbing" | "facility" | "other";
-    CreateRequestDto: {
-      /** @example Broken projector */
-      title: string;
-      /** @example The projector in C3.201 does not turn on. */
-      description: string;
-      /** @example Building C, room 3.201 */
-      location: string;
-      category: components["schemas"]["RequestCategory"];
+    schemas: {
+        /** @enum {string} */
+        RequestCategory: "equipment" | "electrical" | "plumbing" | "facility" | "other";
+        CreateRequestDto: {
+            /** @example Broken projector */
+            title: string;
+            /** @example The projector in C3.201 does not turn on. */
+            description: string;
+            /** @example Building C, room 3.201 */
+            location: string;
+            category: components["schemas"]["RequestCategory"];
+        };
+        /** @enum {string} */
+        RequestStatus: "open" | "resolved";
+        MaintenanceRequestResponseDto: {
+            /** @example 66f5a1c2e4b0a1b2c3d4e5f6 */
+            _id: string;
+            title: string;
+            description: string;
+            location: string;
+            category: components["schemas"]["RequestCategory"];
+            status: components["schemas"]["RequestStatus"];
+            /** Format: date-time */
+            createdAt: string;
+            /** Format: date-time */
+            updatedAt: string;
+        };
     };
-    /** @enum {string} */
-    RequestStatus: "open" | "resolved";
-    MaintenanceRequestResponseDto: {
-      /** @example 66f5a1c2e4b0a1b2c3d4e5f6 */
-      _id: string;
-      title: string;
-      description: string;
-      location: string;
-      category: components["schemas"]["RequestCategory"];
-      status: components["schemas"]["RequestStatus"];
-      /** Format: date-time */
-      createdAt: string;
-      /** Format: date-time */
-      updatedAt: string;
-    };
-  };
-  responses: never;
-  parameters: never;
-  requestBodies: never;
-  headers: never;
-  pathItems: never;
+    responses: never;
+    parameters: never;
+    requestBodies: never;
+    headers: never;
+    pathItems: never;
 }
 export type $defs = Record<string, never>;
 export interface operations {
-  AppController_getHello: {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
+    AppController_getHello: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
     };
-    requestBody?: never;
-    responses: {
-      200: {
-        headers: {
-          [name: string]: unknown;
+    RequestsController_findAll: {
+        parameters: {
+            query?: {
+                category?: components["schemas"]["RequestCategory"];
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
         };
-        content?: never;
-      };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["MaintenanceRequestResponseDto"][];
+                };
+            };
+            /** @description Unsupported category */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
     };
-  };
-  RequestsController_findAll: {
-    parameters: {
-      query?: {
-        category?: components["schemas"]["RequestCategory"];
-      };
-      header?: never;
-      path?: never;
-      cookie?: never;
+    RequestsController_create: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["CreateRequestDto"];
+            };
+        };
+        responses: {
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["MaintenanceRequestResponseDto"];
+                };
+            };
+            /** @description Validation failed */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
     };
-    requestBody?: never;
-    responses: {
-      200: {
-        headers: {
-          [name: string]: unknown;
+    RequestsController_resolve: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
         };
-        content: {
-          "application/json": components["schemas"]["MaintenanceRequestResponseDto"][];
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["MaintenanceRequestResponseDto"];
+                };
+            };
+            /** @description Malformed id */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Request not found */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
         };
-      };
-      /** @description Unsupported category */
-      400: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content?: never;
-      };
     };
-  };
-  RequestsController_create: {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
-    };
-    requestBody: {
-      content: {
-        "application/json": components["schemas"]["CreateRequestDto"];
-      };
-    };
-    responses: {
-      201: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          "application/json": components["schemas"]["MaintenanceRequestResponseDto"];
-        };
-      };
-      /** @description Validation failed */
-      400: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content?: never;
-      };
-    };
-  };
-  RequestsController_resolve: {
-    parameters: {
-      query?: never;
-      header?: never;
-      path: {
-        id: string;
-      };
-      cookie?: never;
-    };
-    requestBody?: never;
-    responses: {
-      200: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          "application/json": components["schemas"]["MaintenanceRequestResponseDto"];
-        };
-      };
-      /** @description Malformed id */
-      400: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content?: never;
-      };
-      /** @description Request not found */
-      404: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content?: never;
-      };
-    };
-  };
 }

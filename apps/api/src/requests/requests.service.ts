@@ -34,18 +34,24 @@ export class RequestsService {
     return this.requestModel.find(filter).sort({ createdAt: -1 }).exec();
   }
 
-  /** Marks a request resolved. Idempotent for already resolved requests. */
+  /**
+   * Marks a request resolved. Only open requests are written, so resolving an
+   * already resolved request is a no-op that keeps its original updatedAt.
+   */
   async resolve(id: string): Promise<MaintenanceRequestDocument> {
     const updated = await this.requestModel
-      .findByIdAndUpdate(
-        id,
+      .findOneAndUpdate(
+        { _id: id, status: 'open' },
         { status: 'resolved' },
         { returnDocument: 'after', runValidators: true },
       )
       .exec();
-    if (!updated) {
+    if (updated) return updated;
+
+    const existing = await this.requestModel.findById(id).exec();
+    if (!existing) {
       throw new NotFoundException(`Maintenance request ${id} not found`);
     }
-    return updated;
+    return existing;
   }
 }
