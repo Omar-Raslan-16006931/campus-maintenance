@@ -68,3 +68,12 @@ npx openapi-typescript http://localhost:3001/api-json -o apps/web/lib/api-types.
 ## Workflow
 
 Plan → implement small steps → verify → read diff → log AI usage → PR → review → CI → merge.
+
+## Notes from `/init` (reviewed and kept)
+
+- Backend is NestJS 11 (Jest for tests, ESLint + Prettier for lint). Unit tests live next to the code as `*.spec.ts`.
+- Frontend is Next.js 16 App Router with Tailwind CSS v4; read `apps/web/AGENTS.md` before using Next APIs (breaking changes vs older versions).
+- shadcn/ui components live in `apps/web/components/ui`; design tokens live in `apps/web/app/globals.css`.
+- Frontend reads the API base URL from `NEXT_PUBLIC_API_URL` (default `http://localhost:3001`).
+- Spec Kit files live in `.specify/`; Spec Kit skills are under `.claude/skills/speckit-*`.
+- Line endings are normalised to LF via `.gitattributes`.
