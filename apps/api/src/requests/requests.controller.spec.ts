@@ -1,4 +1,4 @@
-import { INestApplication } from '@nestjs/common';
+import { INestApplication, NotFoundException } from '@nestjs/common';
 import { Test } from '@nestjs/testing';
 import request from 'supertest';
 import { App } from 'supertest/types';
@@ -12,6 +12,7 @@ describe('RequestsController (HTTP)', () => {
   const service = {
     create: jest.fn(),
     findAll: jest.fn(),
+    resolve: jest.fn(),
   };
 
   const valid = {
@@ -149,6 +150,48 @@ describe('RequestsController (HTTP)', () => {
       await request(app.getHttpServer())
         .get('/requests?status=open')
         .expect(400);
+    });
+  });
+
+  describe('PATCH /requests/:id/resolve', () => {
+    const id = '66f5a1c2e4b0a1b2c3d4e5f6';
+
+    it('resolves a request (200)', async () => {
+      service.resolve.mockResolvedValue({
+        _id: id,
+        ...valid,
+        status: 'resolved',
+      });
+
+      const res = await request(app.getHttpServer())
+        .patch(`/requests/${id}/resolve`)
+        .expect(200);
+
+      expect((res.body as { status: string }).status).toBe('resolved');
+      expect(service.resolve).toHaveBeenCalledWith(id);
+    });
+
+    it('returns 404 when the request does not exist', async () => {
+      service.resolve.mockRejectedValue(new NotFoundException());
+      await request(app.getHttpServer())
+        .patch(`/requests/${id}/resolve`)
+        .expect(404);
+    });
+
+    it('returns 400 for a malformed id', async () => {
+      await request(app.getHttpServer())
+        .patch('/requests/not-an-id/resolve')
+        .expect(400);
+      expect(service.resolve).not.toHaveBeenCalled();
+    });
+
+    it('ignores the request body: the backend alone decides the new status', async () => {
+      service.resolve.mockResolvedValue({ _id: id, status: 'resolved' });
+      const res = await request(app.getHttpServer())
+        .patch(`/requests/${id}/resolve`)
+        .send({ status: 'open' })
+        .expect(200);
+      expect((res.body as { status: string }).status).toBe('resolved');
     });
   });
 });

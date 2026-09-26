@@ -1,3 +1,4 @@
+import { NotFoundException } from '@nestjs/common';
 import { Test } from '@nestjs/testing';
 import { getModelToken } from '@nestjs/mongoose';
 import { RequestsService } from './requests.service';
@@ -9,6 +10,8 @@ describe('RequestsService', () => {
   const model = {
     create: jest.fn(),
     find: jest.fn(),
+    findOneAndUpdate: jest.fn(),
+    findById: jest.fn(),
   };
 
   beforeEach(async () => {
@@ -86,6 +89,49 @@ describe('RequestsService', () => {
     it('returns an empty list when nothing matches', async () => {
       mockFind([]);
       await expect(service.findAll('plumbing')).resolves.toEqual([]);
+    });
+  });
+
+  describe('resolve', () => {
+    const id = '66f5a1c2e4b0a1b2c3d4e5f6';
+    const execResolving = (value: unknown) => ({
+      exec: jest.fn().mockResolvedValue(value),
+    });
+
+    it('sets status to resolved on an open request', async () => {
+      model.findOneAndUpdate.mockReturnValue(
+        execResolving({ _id: id, status: 'resolved' }),
+      );
+
+      const result = await service.resolve(id);
+
+      expect(model.findOneAndUpdate).toHaveBeenCalledWith(
+        { _id: id, status: 'open' },
+        { status: 'resolved' },
+        expect.objectContaining({ returnDocument: 'after' }),
+      );
+      expect(result.status).toBe('resolved');
+      expect(model.findById).not.toHaveBeenCalled();
+    });
+
+    it('returns an already resolved request without writing', async () => {
+      model.findOneAndUpdate.mockReturnValue(execResolving(null));
+      model.findById.mockReturnValue(
+        execResolving({ _id: id, status: 'resolved' }),
+      );
+
+      const result = await service.resolve(id);
+
+      expect(result.status).toBe('resolved');
+    });
+
+    it('throws NotFoundException when the request does not exist', async () => {
+      model.findOneAndUpdate.mockReturnValue(execResolving(null));
+      model.findById.mockReturnValue(execResolving(null));
+
+      await expect(service.resolve(id)).rejects.toBeInstanceOf(
+        NotFoundException,
+      );
     });
   });
 });

@@ -1,12 +1,22 @@
-import { Body, Controller, Get, Post, Query } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Param,
+  Patch,
+  Post,
+  Query,
+} from '@nestjs/common';
 import {
   ApiBadRequestResponse,
   ApiCreatedResponse,
+  ApiNotFoundResponse,
   ApiOkResponse,
   ApiTags,
 } from '@nestjs/swagger';
 import { CreateRequestDto } from './dto/create-request.dto';
 import { ListRequestsQueryDto } from './dto/list-requests-query.dto';
+import { RequestIdParamDto } from './dto/request-id-param.dto';
 import { MaintenanceRequestResponseDto } from './dto/maintenance-request-response.dto';
 import { RequestsService } from './requests.service';
 import { MaintenanceRequestDocument } from './schemas/maintenance-request.schema';
@@ -30,5 +40,15 @@ export class RequestsController {
     @Query() query: ListRequestsQueryDto,
   ): Promise<MaintenanceRequestDocument[]> {
     return this.requestsService.findAll(query.category);
+  }
+
+  @Patch(':id/resolve')
+  @ApiOkResponse({ type: MaintenanceRequestResponseDto })
+  @ApiBadRequestResponse({ description: 'Malformed id' })
+  @ApiNotFoundResponse({ description: 'Request not found' })
+  resolve(
+    @Param() params: RequestIdParamDto,
+  ): Promise<MaintenanceRequestDocument> {
+    return this.requestsService.resolve(params.id);
   }
 }

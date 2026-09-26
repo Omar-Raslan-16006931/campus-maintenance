@@ -9,7 +9,7 @@ import {
 
 export type MaintenanceRequestDocument = HydratedDocument<MaintenanceRequest>;
 
-@Schema({ timestamps: true })
+@Schema({ timestamps: true, versionKey: false })
 export class MaintenanceRequest {
   @Prop({ required: true, trim: true })
   title: string;

@@ -70,3 +70,12 @@ export async function listRequests(
   if (!res.ok) throw await toApiError(res);
   return (await res.json()) as MaintenanceRequest[];
 }
+
+export async function resolveRequest(id: string): Promise<MaintenanceRequest> {
+  const res = await fetch(
+    `${API_URL}/requests/${encodeURIComponent(id)}/resolve`,
+    { method: "PATCH" },
+  );
+  if (!res.ok) throw await toApiError(res);
+  return (await res.json()) as MaintenanceRequest;
+}

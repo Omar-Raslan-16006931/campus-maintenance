@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import type { RequestCategory } from './request.constants';
@@ -32,5 +32,26 @@ export class RequestsService {
   ): Promise<MaintenanceRequestDocument[]> {
     const filter = category ? { category } : {};
     return this.requestModel.find(filter).sort({ createdAt: -1 }).exec();
+  }
+
+  /**
+   * Marks a request resolved. Only open requests are written, so resolving an
+   * already resolved request is a no-op that keeps its original updatedAt.
+   */
+  async resolve(id: string): Promise<MaintenanceRequestDocument> {
+    const updated = await this.requestModel
+      .findOneAndUpdate(
+        { _id: id, status: 'open' },
+        { status: 'resolved' },
+        { returnDocument: 'after', runValidators: true },
+      )
+      .exec();
+    if (updated) return updated;
+
+    const existing = await this.requestModel.findById(id).exec();
+    if (!existing) {
+      throw new NotFoundException(`Maintenance request ${id} not found`);
+    }
+    return existing;
   }
 }
