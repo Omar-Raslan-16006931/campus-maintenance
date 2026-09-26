@@ -7,6 +7,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { ResolveButton } from "@/components/resolve-button";
 import { StatusBadge } from "@/components/status-badge";
 import { CATEGORY_LABELS, type MaintenanceRequest } from "@/lib/requests";
 
@@ -22,8 +23,11 @@ export function RequestCard({ request }: { request: MaintenanceRequest }) {
           </span>
           <Badge variant="secondary">{CATEGORY_LABELS[request.category]}</Badge>
         </CardDescription>
-        <CardAction>
+        <CardAction className="flex flex-col items-end gap-2">
           <StatusBadge status={request.status} />
+          {request.status === "open" && (
+            <ResolveButton id={request._id} title={request.title} />
+          )}
         </CardAction>
       </CardHeader>
     </Card>

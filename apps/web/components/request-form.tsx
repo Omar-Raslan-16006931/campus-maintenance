@@ -182,7 +182,7 @@ export function RequestForm() {
               name="title"
               value={values.title}
               onChange={(e) => update("title", e.target.value)}
-              placeholder="Broken projector"
+              placeholder="e.g. Broken projector"
               aria-invalid={!!errors.title}
               aria-describedby={errors.title ? "title-error" : undefined}
             />
@@ -199,7 +199,7 @@ export function RequestForm() {
               rows={4}
               value={values.description}
               onChange={(e) => update("description", e.target.value)}
-              placeholder="What is wrong? Since when?"
+              placeholder="e.g. The projector does not turn on since Monday."
               aria-invalid={!!errors.description}
               aria-describedby={
                 errors.description ? "description-error" : undefined
@@ -219,7 +219,7 @@ export function RequestForm() {
                 name="location"
                 value={values.location}
                 onChange={(e) => update("location", e.target.value)}
-                placeholder="Building C, room 3.201"
+                placeholder="e.g. Building C, room 3.201"
                 aria-invalid={!!errors.location}
                 aria-describedby={
                   errors.location ? "location-error" : undefined

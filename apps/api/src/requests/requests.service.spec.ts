@@ -1,3 +1,4 @@
+import { NotFoundException } from '@nestjs/common';
 import { Test } from '@nestjs/testing';
 import { getModelToken } from '@nestjs/mongoose';
 import { RequestsService } from './requests.service';
@@ -9,6 +10,7 @@ describe('RequestsService', () => {
   const model = {
     create: jest.fn(),
     find: jest.fn(),
+    findByIdAndUpdate: jest.fn(),
   };
 
   beforeEach(async () => {
@@ -86,6 +88,34 @@ describe('RequestsService', () => {
     it('returns an empty list when nothing matches', async () => {
       mockFind([]);
       await expect(service.findAll('plumbing')).resolves.toEqual([]);
+    });
+  });
+
+  describe('resolve', () => {
+    const id = '66f5a1c2e4b0a1b2c3d4e5f6';
+
+    it('sets status to resolved and returns the updated request', async () => {
+      const exec = jest.fn().mockResolvedValue({ _id: id, status: 'resolved' });
+      model.findByIdAndUpdate.mockReturnValue({ exec });
+
+      const result = await service.resolve(id);
+
+      expect(model.findByIdAndUpdate).toHaveBeenCalledWith(
+        id,
+        { status: 'resolved' },
+        expect.objectContaining({ returnDocument: 'after' }),
+      );
+      expect(result.status).toBe('resolved');
+    });
+
+    it('throws NotFoundException when the request does not exist', async () => {
+      model.findByIdAndUpdate.mockReturnValue({
+        exec: jest.fn().mockResolvedValue(null),
+      });
+
+      await expect(service.resolve(id)).rejects.toBeInstanceOf(
+        NotFoundException,
+      );
     });
   });
 });
