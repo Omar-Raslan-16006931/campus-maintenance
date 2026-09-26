@@ -1,8 +1,9 @@
 # AI Usage Log
 
-| Date       | Student | Branch / Issue                | Tool                  | Prompt / Task                                                                              | Accepted, changed, or rejected                                                   |
-| ---------- | ------- | ----------------------------- | --------------------- | ------------------------------------------------------------------------------------------ | -------------------------------------------------------------------------------- |
-| YYYY-MM-DD | Name    | feature/5-report-request / #5 | Claude Code           | Planned POST /requests and form                                                            | Accepted DTO structure; changed error text                                       |
-| 2026-09-26 | Omar    | chore/api-setup               | Claude (Cowork agent) | Planned Mongoose via @nestjs/config, global ValidationPipe, CORS, PORT and Swagger at /api | Accepted; moved pipe/CORS into `setup-app.ts` so e2e tests reuse the same config |
+| Date       | Student | Branch / Issue                | Tool                  | Prompt / Task                                                                                                                       | Accepted, changed, or rejected                                                                        |
+| ---------- | ------- | ----------------------------- | --------------------- | ----------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------- |
+| YYYY-MM-DD | Name    | feature/5-report-request / #5 | Claude Code           | Planned POST /requests and form                                                                                                     | Accepted DTO structure; changed error text                                                            |
+| 2026-09-26 | Omar    | chore/api-setup               | Claude (Cowork agent) | Planned Mongoose via @nestjs/config, global ValidationPipe, CORS, PORT and Swagger at /api                                          | Accepted; moved pipe/CORS into `setup-app.ts` so e2e tests reuse the same config                      |
+| 2026-09-26 | Omar    | docs/speckit-plan             | Claude (Cowork agent) | Wrote constitution, spec, plan and tasks from the Spec Kit templates (equivalent of /speckit-constitution, -specify, -plan, -tasks) | Accepted structure; rejected pagination suggestion (not in MVP); split tasks to match team slices A–D |
 
 Never include secrets, passwords, tokens, `.env` values, or connection strings.
