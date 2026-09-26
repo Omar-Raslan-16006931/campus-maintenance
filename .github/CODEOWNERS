@@ -1,13 +1,13 @@
-# Replace placeholders with real GitHub usernames.
-/specs/ @studentD
-/apps/api/src/requests/schemas/ @studentD
-/apps/api/src/requests/requests.module.ts @studentD
-/apps/web/app/globals.css @studentD
-/apps/web/app/layout.tsx @studentD
+# Solo project: Omar owns every slice (A, B, C, D).
+/specs/ @Omar-Raslan-16006931
+/apps/api/src/requests/schemas/ @Omar-Raslan-16006931
+/apps/api/src/requests/requests.module.ts @Omar-Raslan-16006931
+/apps/web/app/globals.css @Omar-Raslan-16006931
+/apps/web/app/layout.tsx @Omar-Raslan-16006931
 
-/apps/web/app/requests/new/ @studentA
-/apps/web/app/requests/ @studentB @studentC
+/apps/web/app/requests/new/ @Omar-Raslan-16006931
+/apps/web/app/requests/ @Omar-Raslan-16006931 @Omar-Raslan-16006931
 
-/.github/ @studentA @studentB @studentC @studentD
-/AGENTS.md @studentA @studentB @studentC @studentD
-/CLAUDE.md @studentA @studentB @studentC @studentD
+/.github/ @Omar-Raslan-16006931 @Omar-Raslan-16006931 @Omar-Raslan-16006931 @Omar-Raslan-16006931
+/AGENTS.md @Omar-Raslan-16006931 @Omar-Raslan-16006931 @Omar-Raslan-16006931 @Omar-Raslan-16006931
+/CLAUDE.md @Omar-Raslan-16006931 @Omar-Raslan-16006931 @Omar-Raslan-16006931 @Omar-Raslan-16006931
