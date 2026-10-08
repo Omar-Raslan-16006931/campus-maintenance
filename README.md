@@ -1,6 +1,6 @@
 <div align="center">
 
-<img src="https://capsule-render.vercel.app/api?type=waving&color=gradient&customColorList=4&height=200&section=header&text=Campus%20Maintenance&fontSize=56&fontColor=ffffff&fontAlignY=36&desc=Report%2C%20browse%20and%20resolve%20campus%20maintenance%20requests&descSize=16&descAlignY=58&animation=fadeIn" width="100%" alt="Campus Maintenance"/>
+<img src=".github/assets/banner.svg" width="100%" alt="Campus Maintenance"/>
 
 <img src="https://img.shields.io/github/last-commit/Omar-Raslan-16006931/campus-maintenance?style=for-the-badge&color=6366f1" alt="Last commit"/>
 <img src="https://img.shields.io/github/languages/top/Omar-Raslan-16006931/campus-maintenance?style=for-the-badge&color=0ea5e9" alt="Top language"/>
@@ -77,6 +77,6 @@ Never commit `.env` or secrets.
 
 **Made with ❤️ by [Omar Raslan](https://github.com/Omar-Raslan-16006931)**
 
-<img src="https://capsule-render.vercel.app/api?type=waving&color=gradient&customColorList=4&height=100&section=footer" width="100%"/>
+<img src=".github/assets/footer.svg" width="100%"/>
 
 </div>
